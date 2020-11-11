@@ -16,3 +16,12 @@ The "src" folder have 3 folders.
 
 
 app.js : This file is created in order to find the required products from DB , sending the data to client side and check the rendering of the products in client side. (Ignore this)
+
+
+First you need to run both fruit_seed.js and vegetable_Seed.js which are present under src/seed folder . Once you run these files, it will store the requried data in your MongoDB
+DB name is grocery_delivery.
+
+collection name for fruit : fruits
+collection name for vegetable: vegetables
+
+After, running those programs, check those in your Mongo BD using Robo 3T . 
