@@ -1,0 +1,23 @@
+{{>header}}
+
+<div class="jumbotron">
+    <h1 class="display-4">Grocery Store</h1>
+</div>
+
+<div class="container">
+    {{#each product }}
+    <div class="row">
+        {{#each this}}
+        <div class="col-xs-6 col-md-4"> <img class="img-responsive inline-block" src="{{this.imagePath}}"
+                style="width:200px; height:200px; display:inline-block" class="img-thumbnail" />
+            <div class="caption">
+                <p>{{this.title}}</p>
+                <p>Price: {{this.price}} <span><i>{{this.price_description}}</i>></span></p>
+                <p>{{this.product_description}}</p>
+            </div>
+        </div>
+        {{/each}}
+    </div>
+    {{/each}}
+</div>
+{{>footer}}
