@@ -5,105 +5,105 @@ const vegetables = require("../models/vegetables")
 
 const products = [
     new vegetables({
-        imagePath: "asparaguch_bunch.jpeg",
+        imagePath: "/images/vegetables/asparaguch_bunch.jpeg",
         title: "Asparagus, Bunch",
         price: 2.48,
         price_description: "each 2.48/LB",
         product_description: "This asparagus is loaded with nutrients and has a great fresh taste. This versatile vegetable can be prepared in a myriad of different ways."
     }),
     new vegetables({
-        imagePath: "baby_cut_carrots.jpeg",
+        imagePath: "/images/vegetables/baby_cut_carrots.jpeg",
         title: "Bolthouse Farms Peeled Baby Cut Carrots, 1 lb Bag",
         price: 0.98,
         price_description: "98.0cents/LB",
         product_description: "Bolthouse Farms baby carrots have a crisp texture. These Bolthouse Farms baby carrots don't have any preservatives. Enjoy them at any time of the day."
     }),
     new vegetables({
-        imagePath: "baby_yellow_potato.jpeg",
+        imagePath: "/images/vegetables/baby_yellow_potato.jpeg",
         title: "Baby Yellow Potatoes, 1.5 lb Bag",
         price: 3.47,
         price_description: "14.5cents/OZ",
         product_description: "Melissa's Baby Yellow Potatoes are hand selected for excellent quality. Firm, well-shaped, and smooth, these potatoes can be cooked in almost any way imaginable. They have a wonderful, buttery texture and flavor when baked, roasted, boiled, steamed, sauteed, or mashed."
     }),
     new vegetables({
-        imagePath: "broccoli.jpeg",
+        imagePath: "/images/vegetables/broccoli.jpeg",
         title: "Broccoli Crowns",
         price: 1.11,
         price_description: "each 1.48/lb",
         product_description: "Broccoli crowns are the premium cut of broccoli, trimmed just under the broccoli head. Healthy & Delicious!"
     }),
     new vegetables({
-        imagePath: "cauliflower.jpeg",
+        imagePath: "/images/vegetables/cauliflower.jpeg",
         title: "Cauliflower",
         price: 1.98,
         price_description: "each $1.98",
         product_description: "Cauliflower (1 each) is an outstanding addition to a menu. Often used as a carb substitute, it can also make a tasty starter or main entree item."
     }),
     new vegetables({
-        imagePath: "cucumber.jpeg",
+        imagePath: "/images/vegetables/cucumber.jpeg",
         title: "Cucumber",
         price: 0.50,
         price_description: "each $0.50",
         product_description: " Packed with nutritional benefits such as being naturally low in calories, carbohydrates, sodium, fat, and cholesterol, cucumbers also provide potassium, fiber, and vitamin C and clock in at a cool 16 calories per cup."
     }),
     new vegetables({
-        imagePath: "eggplant.jpeg",
+        imagePath: "/images/vegetables/eggplant.jpeg",
         title: "Eggplant",
         price: 1.23,
         price_description: "each 98.0/lb",
         product_description: "Eggplants are incredibly versatile and can be used to make a myriad of different recipes. Try them coated in breadcrumbs and fried or a comforting side, or for a healthier option you can stuff them and roast them in the oven."
     }),
     new vegetables({
-        imagePath: "fresh_celery.jpeg",
+        imagePath: "/images/vegetables/fresh_celery.jpeg",
         title: "Fresh Celery",
         price: 0.88,
         price_description: "each 0.88",
         product_description: " Celery is a low-calorie vegetable that consists mostly of water but is packed full of antioxidants and fiber."
     }),
     new vegetables({
-        imagePath: "fresh_corn_cub.jpeg",
+        imagePath: "/images/vegetables/fresh_corn_cub.jpeg",
         title: "Fresh Corn on the Cob",
         price: 0.38,
         price_description: "0.38/piece",
         product_description: "There's nothing like freshly picked corn straight from the fields, cooked until the kernels are tender and bursting with sweet juice! This summer staple is perfect for casual dinners, BBQs, picnics, and camping trips."
     }),
     new vegetables({
-        imagePath: "fresh_ginger_root.jpeg",
+        imagePath: "/images/vegetables/fresh_ginger_root.jpeg",
         title: "Fresh Ginger Root",
         price: 1.98,
         price_description: "$1.98/lb",
         product_description: "Fresh Ginger Root has a light brown, textured skin and white to yellow flesh. Its peppery, pungent, zesty flavor is a great way to bring acidity and just a touch of sweetness to juices, teas, stir-fries, and more."
     }),
     new vegetables({
-        imagePath: "garlic.jpeg",
+        imagePath: "/images/vegetables/garlic.jpeg",
         title: "Garlic",
         price: 3.48,
         price_description: "$3.48/lb",
         product_description: "Garlic's signature flavors become caramelized and sweeter when cooked, making it a perfect accompaniment to many dishes such as pasta, shrimp, chicken, stews, and more."
     }),
     new vegetables({
-        imagePath: "green_beans.jpeg",
+        imagePath: "/images/vegetables/green_beans.jpeg",
         title: "Green Beans",
         price: 1.68,
         price_description: "$1.68/lb",
         product_description: "These beans are an excellent source of vitamin A and vitamin C. Serve as is or add your favorite spices for additional flavor."
     }),
     new vegetables({
-        imagePath: "green_bell_pepper.jpeg",
+        imagePath: "/images/vegetables/green_bell_pepper.jpeg",
         title: "Green Bell Pepper",
         price: 0.58,
         price_description: "$0.58 per piece",
         product_description: "This vegetable contains essential vitamins such as A and C, and minerals including calcium and magnesium. Green bell pepper, also known as green capsicum, has a crisp flavor that enhances a variety of recipes."
     }),
     new vegetables({
-        imagePath: "green_cabbage.png",
+        imagePath: "/images/vegetables/green_cabbage.png",
         title: "Green Cabbage",
         price: 1.74,
         price_description: "$58.0 cent/LB",
         product_description: "Green cabbage is low in calories and high in fiber and antioxidants making it a great part of any healthy diet. Best of all, this cabbage can be used a myriad of different recipes and cuisines."
     }),
     new vegetables({
-        imagePath: "green_onion_bunch.jpeg",
+        imagePath: "/images/vegetables/green_onion_bunch.jpeg",
         title: "Green Onion, bunch",
         price: 0.50,
         price_description: "$ 0.50 /bunch",
@@ -111,7 +111,7 @@ const products = [
     }),
 
     new vegetables({
-        imagePath: "iceberg_lettuce.jpeg",
+        imagePath: "/images/vegetables/iceberg_lettuce.jpeg",
         title: "Iceberg Lettuce",
         price: 1.53,
         price_description: "$ 1.53 each",
@@ -119,7 +119,7 @@ const products = [
     }),
 
     new vegetables({
-        imagePath: "marketside_chicken_ceasar_salad_bowl.jpeg",
+        imagePath: "/images/vegetables/marketside_chicken_ceasar_salad_bowl.jpeg",
         title: "Marketside Chicken Caesar Salad Bowl 6.25 oz",
         price: 2.98,
         price_description: "47.7/OZ",
@@ -127,7 +127,7 @@ const products = [
     }),
 
     new vegetables({
-        imagePath: "marketside_organic_baby_spinach.jpeg",
+        imagePath: "/images/vegetables/marketside_organic_baby_spinach.jpeg",
         title: "Marketside Organic Baby Spinach, 5 oz",
         price: 2.56,
         price_description: "51.2cents/OZ",
@@ -135,7 +135,7 @@ const products = [
     }),
 
     new vegetables({
-        imagePath: "marketside_southwest_chooped_salad.jpeg",
+        imagePath: "/images/vegetables/marketside_southwest_chooped_salad.jpeg",
         title: "Marketside Southwest Chopped Salad Kit, 10.3 oz",
         price: 2.98,
         price_description: "23.1/oz",
@@ -143,7 +143,7 @@ const products = [
     }),
 
     new vegetables({
-        imagePath: "marketside_sugar_snap_peas.jpeg",
+        imagePath: "/images/vegetables/marketside_sugar_snap_peas.jpeg",
         title: "Marketside Sugar Snap Peas, 8oz",
         price: 2.58,
         price_description: "32.3/oz",
@@ -151,7 +151,7 @@ const products = [
     }),
 
     new vegetables({
-        imagePath: "mixed_bell_pepper.jpeg",
+        imagePath: "/images/vegetables/mixed_bell_pepper.jpeg",
         title: "Mixed Bell Peppers (Selection May Vary), 3 Count",
         price: 3.28,
         price_description: "3.28 /3 piece",
@@ -159,7 +159,7 @@ const products = [
     }),
 
     new vegetables({
-        imagePath: "red_onion.jpeg",
+        imagePath: "/images/vegetables/red_onion.jpeg",
         title: "Red Onions",
         price: 0.78,
         price_description: "98.0cents/LB",
@@ -168,7 +168,7 @@ const products = [
 
 
     new vegetables({
-        imagePath: "roma_tomato.jpeg",
+        imagePath: "/images/vegetables/roma_tomato.jpeg",
         title: "Roma Tomatoes",
         price: 0.98,
         price_description: "98.0/lb",
@@ -176,7 +176,7 @@ const products = [
     }),
 
     new vegetables({
-        imagePath: "russet_potato.jpeg",
+        imagePath: "/images/vegetables/russet_potato.jpeg",
         title: "Simply Perfect Russet Potatoes, 5lb bag",
         price: 1.97,
         price_description: "39.4/lb",
@@ -184,7 +184,7 @@ const products = [
     }),
 
     new vegetables({
-        imagePath: "serrano_peppers.jpeg",
+        imagePath: "/images/vegetables/serrano_peppers.jpeg",
         title: "Serrano Peppers, approx. 8-12 per 0.25 lb",
         price: 0.27,
         price_description: "$1.4/lb",
@@ -192,7 +192,7 @@ const products = [
     }),
 
     new vegetables({
-        imagePath: "spinach.jpeg",
+        imagePath: "/images/vegetables/spinach.jpeg",
         title: "Marketside Fresh Spinach, 10 oz",
         price: 1.37,
         price_description: "$13 cents/OZ",
@@ -200,7 +200,7 @@ const products = [
     }),
 
     new vegetables({
-        imagePath: "sweet_potatoes.jpeg",
+        imagePath: "/images/vegetables/sweet_potatoes.jpeg",
         title: "Sweet Potatoes",
         price: 0.54,
         price_description: "67.0/lb",
@@ -209,7 +209,7 @@ const products = [
 
 
     new vegetables({
-        imagePath: "tomatoes.jpeg",
+        imagePath: "/images/vegetables/tomatoes.jpeg",
         title: "Tomatoes on the Vine, avg 1.4 lb cluster",
         price: 1.48,
         price_description: "each 1.48/lb",
@@ -217,7 +217,7 @@ const products = [
     }),
 
     new vegetables({
-        imagePath: "white_mushroom.jpeg",
+        imagePath: "/images/vegetables/white_mushroom.jpeg",
         title: "Fresh White Mushrooms, 8 oz",
         price: 1.38,
         price_description: "17.3/oz",
@@ -225,7 +225,7 @@ const products = [
     }),
 
     new vegetables({
-        imagePath: "whole_carrot.jpeg",
+        imagePath: "/images/vegetables/whole_carrot.jpeg",
         title: "Whole Carrots, 1lb bag",
         price: 0.82,
         price_description: "82.0 cents/LB",
@@ -233,7 +233,7 @@ const products = [
     }),
 
     new vegetables({
-        imagePath: "yellow_onion.jpeg",
+        imagePath: "/images/vegetables/yellow_onion.jpeg",
         title: "Yellow Onions 3 lb Bag",
         price: 1.94,
         price_description: "64.7cents/LB",
@@ -242,7 +242,7 @@ const products = [
 
 
     new vegetables({
-        imagePath: "yellow_squash.jpeg",
+        imagePath: "/images/vegetables/yellow_squash.jpeg",
         title: "Yellow Squash, 1 Each",
         price: 1.94,
         price_description: "$1.38/lb",
@@ -251,7 +251,7 @@ const products = [
 
 
     new vegetables({
-        imagePath: "zucchini.jpeg",
+        imagePath: "/images/vegetables/zucchini.jpeg",
         title: "Zucchini, 1 Each",
         price: 0.76,
         price_description: "$1.38/lb",
