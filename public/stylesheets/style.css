@@ -1,0 +1,28 @@
+.price {
+    font-weight: bold;
+    font-size: medium;
+}
+
+.price_desc{
+    font-size: smaller;
+}
+
+.price_desc:before {
+    content: ' (';
+}
+
+.price_desc:after {
+    content: ')';
+}
+
+#add_btn{
+    color: black;
+}
+
+.product_title{
+    cursor: pointer;
+}
+
+.quantity{
+    margin: 8px;
+}

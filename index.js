@@ -13,13 +13,13 @@ const viewsDirectory = path.join(__dirname, "src//views")
 const partialsPath = path.join(__dirname, "src/views/partials")
 
 //setting the properties for express
-app.set('view engine', 'hbs')
+app.set('view engine', '.hbs')
 app.set('views', viewsDirectory)
 hbs.registerPartials(partialsPath)
 
 app.use(express.static(publicDirectoryPath))
 
-app.get("/products",(req,res)=>{
+app.get("/",(req,res)=>{
     fruits.find({}).then((result)=>{
         var productChunks=[]
         var chunkSize=3
