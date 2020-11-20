@@ -1,7 +1,11 @@
 const express = require('express')
 const path = require('path')
 const hbs = require('hbs')
+<<<<<<< HEAD
 const fruits=require("./src/models/fruits")
+=======
+const products=require("./src/models/product_model").personalcare
+>>>>>>> main
 require("./src/db/db_connection")
 
 const app = express()
@@ -19,8 +23,13 @@ hbs.registerPartials(partialsPath)
 
 app.use(express.static(publicDirectoryPath))
 
+<<<<<<< HEAD
 app.get("/",(req,res)=>{
     fruits.find({}).then((result)=>{
+=======
+app.get("/personalcare",(req,res)=>{
+    products.find({}).then((result)=>{
+>>>>>>> main
         var productChunks=[]
         var chunkSize=3
         for (var i=0;i<result.length;i+=chunkSize){
