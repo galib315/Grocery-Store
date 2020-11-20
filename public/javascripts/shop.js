@@ -1,11 +1,23 @@
+var imgSrc;
+var title;
+var price;
+var price_desc;
+var product_desc;
+var id;
+
+//manipulate DOM elements on the shopping page(s) (NOT the shopping cart page)
 $(document).ready(function(){
+    
+    //function to display popup window upon clicking the product title
     $(".product_title").click(function(){
-        var imgSrc = $(this).parent().prev("img").attr("src");
-        var title = $(this).text();
-        var price = $(this).siblings("p").find(".price").text();
-        var price_desc = $(this).siblings("p").find(".price_desc").text();
-        var product_desc = $(this).siblings(".product_desc").text();
+        imgSrc = $(this).parent().prev("img").attr("src");
+        title = $(this).text();
+        price = $(this).siblings("p").find(".price").text();
+        price_desc = $(this).siblings("p").find(".price_desc").text();
+        product_desc = $(this).siblings(".product_desc").text();
+        id = $(this).siblings(".id").text();
         
+        //remove the popup window element if it already exists in the body
         if($("#myModal").length){
             $("#myModal").remove();
         }
@@ -21,15 +33,16 @@ $(document).ready(function(){
                         '</div>' +
 
                         '<div class="modal-body">' +
-                            '<img src="' + imgSrc + '" width="250" height="250" />' +
+                            '<img class="img-popup-thumbnail" src="' + imgSrc + '"/>' +
                             '<h4>' + title + '</h4>' +
                             '<p><span class="price">' + price + '</span><span class="price_desc">' + price_desc + '</span></p>' +
                             '<p class="product_desc">' + product_desc + '</p>' +
                         '</div>' +
 
                         '<div class="modal-footer">' +
+                            '<p class="id" hidden>' + id + '</p>' +
                             '<input class="quantity" type="number" name="quantity" value="1" min="1" max="50">' +
-                            '<button id = "add_btn" type="button" class="btn btn-warning btn-sm">Add to Cart</button>' +
+                            '<a class="btn btn-warning add-btn" role="button">Add to Cart</a>' +
                         '</div>' +
 
                     '</div>' +
@@ -39,5 +52,12 @@ $(document).ready(function(){
             '</div>'
         );
     });
+
+    //event handler for "Add to Cart" button on the shopping page(s)
+    $("body").on("click", "a.add-btn", (function(){
+        id = $(this).siblings(".id").text();
+        var qty = $(this).siblings(".quantity").val();
+        window.location.href = 'add-to-cart/' + id + '/' + qty; 
+    }));
 
 });

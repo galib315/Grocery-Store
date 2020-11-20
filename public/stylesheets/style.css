@@ -3,6 +3,11 @@
     font-size: medium;
 }
 
+/* don't display anything if price description is not present */
+.price_desc:empty{
+    display: none;
+}
+
 .price_desc{
     font-size: smaller;
 }
@@ -15,7 +20,11 @@
     content: ')';
 }
 
-#add_btn{
+a.add-btn{
+    color: black;
+}
+
+a.add-btn-2{
     color: black;
 }
 
@@ -23,6 +32,27 @@
     cursor: pointer;
 }
 
+.cart-product-title{
+    cursor: pointer;
+}
+
 .quantity{
     margin: 8px;
+}
+
+.img-thumbnail{
+    width:200px; 
+    height:200px; 
+    display:inline-block;
+}
+
+.img-popup-thumbnail{
+    width: 240px; 
+    height: 250px;
+}
+
+.img-container{
+    padding: 10px;
+    display: table;
+	table-layout: fixed;
 }

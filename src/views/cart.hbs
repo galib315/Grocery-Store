@@ -1,0 +1,74 @@
+{{>header}}
+
+{{# if this.products }}
+    <div class="px-4 px-lg-0">
+  
+    <div class="container text-white py-5 text-center">
+        <h1 class="display-4">Shopping Cart</h1>
+        </br></br>
+        <p style="text-align:left;">Click on the product title to change quantity</p>
+        </br>
+    </div>
+  
+    <div class="pb-5">
+        <div class="container">
+        <div class="row">
+            <div class="col-lg-12 p-5 bg-white rounded shadow-sm mb-5">
+
+            <!-- Shopping cart table -->
+            <div class="table-responsive">
+                <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col" class="border-0 bg-light">
+                            <div class="p-2 px-3 text-uppercase">Product</div>
+                        </th>
+                        <th scope="col" class="border-0 bg-light">
+                            <div class="py-2 text-uppercase">Price (USD)</div>
+                        </th>
+                        <th scope="col" class="border-0 bg-light">
+                            <div class="py-2 text-uppercase">Quantity</div>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{# each products }}
+                        <tr>
+                            <th scope="row" class="border-0">
+                                <div class="p-2">
+                                    <img src="{{this.item.imagePath}}" width="70" class="img-fluid rounded shadow-sm">
+                                    <div class="ml-3 d-inline-block align-middle">
+                                        <a class="text-dark d-inline-block align-middle cart-product-title" data-toggle="modal" data-target="#myModal">{{this.item.title}}</a>
+                                        <p hidden><span class="price">{{this.price}}</span><span class="price_desc">{{this.item.price_description}}</span></p>
+                                        <p class="product_desc" hidden>{{this.item.product_description}}</p>
+                                        <p class="id" hidden>{{this.item._id}}</p>
+                                    </div>
+                                </div>
+                            </th>
+                            <td class="border-0 align-middle"><strong class="item-price">{{this.price}}</strong></td>
+                            <td class="border-0 align-middle"><strong>{{this.qty}}</strong></td>
+                            <td class="border-0 align-middle"><a href="#" class="text-dark"><i class="fa fa-trash"></i></a></td>
+                        </tr>
+                    {{/each}}
+                </tbody>
+                </table>
+            </div>
+            </div>
+        </div>
+        </br>
+
+        <div class="row py-5 p-4 bg-white rounded shadow-sm">
+            <div class="col-lg-6" id="cart-summary">
+            </div>
+        </div>
+    </div>
+    </div>
+
+{{ else }}
+    <div class="px-4 px-lg-0">
+        <div class="container text-white py-5 text-center">
+            <h4 class="display-4">Cart Currently Empty - Nothing to Display</h4>
+            </br></br>
+        </div>
+    </div>
+{{/if}}
