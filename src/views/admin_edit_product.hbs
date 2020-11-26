@@ -1,0 +1,36 @@
+{{>header}}
+
+<div class="container">
+<h1>Product Edit</h1>
+
+
+<form action="/products/{{product._id}}?_method=PUT" method="POST" >
+<div class="form-group">
+		<input type="text" name="title" value="{{product.title}}" class="form-control"></input>
+</div>
+<div class="form-group">
+		<input type="text" name="category" value="{{product.category}}" class="form-control"></input>
+</div>
+<div class="form-group">
+		<input type="text" name="imagePath" value="{{product.imagePath}}" class="form-control"></input>
+</div>
+
+<div class="form-group">
+		<input type="text" name="price" value="{{product.price}}" class="form-control"></input>
+</div>
+
+<div class="form-group">
+    <input type="text" placeholder="There is no price description for this product" name="price_description" default value="{{product.price_description}}" class="form-control"></input>
+</div>
+
+<div class="form-group">
+		<textarea name="product_description" class="form-control" >{{product.product_description}}</textarea>
+</div>
+<button type="submit" class="btn btn-warning"> Update Product </button>
+</form>
+
+<p><a href="/products/{{product._id}}/show">Back to Product</a></p>
+
+</div>
+
+{{>footer}}
