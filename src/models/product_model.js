@@ -36,7 +36,5 @@ const products_schema = new Schema({
 })
 
 module.exports = {
-    fruits:mongoose.model("fruit", products_schema),
-    vegetables:mongoose.model("vegetables",products_schema),
-    personalcare:mongoose.model("personal_care",products_schema)
+    product:mongoose.model("product", products_schema)
 }

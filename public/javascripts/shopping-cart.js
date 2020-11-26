@@ -8,8 +8,9 @@ var id;
 //manipulate DOM elements on the shopping cart page
 $(document).ready(function(){
     
+    var precise_subTotal = 0;
     var subTotal = 0;
-    var shippingFee = 9.99;
+    const shippingFee = 9.99;
     var tax = 0;
     var grandTotal = 0;
 
@@ -17,6 +18,7 @@ $(document).ready(function(){
         
         var getPrice = $(this).text();
         subTotal += parseFloat(getPrice);
+        precise_subTotal = subTotal.toFixed(2);
         
         //remove the product that has been deleted from the shopping cart
         if(($(this).parent().next("td").find("strong").text()) == 0){
@@ -33,7 +35,7 @@ $(document).ready(function(){
         '<div class="bg-light rounded-pill px-4 py-3 text-uppercase font-weight-bold">Order summary </div></br>' +
             '<div class="p-4">' +
                 '<ul class="list-unstyled mb-4">' +
-                    '<li class="d-flex justify-content-between py-3 border-bottom"><strong class="text-muted">Order Subtotal </strong><strong>$' + subTotal + '</strong></li>' +
+                    '<li class="d-flex justify-content-between py-3 border-bottom"><strong class="text-muted">Order Subtotal </strong><strong>$' + precise_subTotal + '</strong></li>' +
                     '<li class="d-flex justify-content-between py-3 border-bottom"><strong class="text-muted">Shipping and handling </strong><strong>$' + shippingFee + '</strong></li>' +
                     '<li class="d-flex justify-content-between py-3 border-bottom"><strong class="text-muted">Tax </strong><strong>$' + tax + '</strong></li>' +
                     '<li class="d-flex justify-content-between py-3 border-bottom"><strong class="text-muted">Grand Total </strong><strong>$' + grandTotal + '</strong></li>' +
@@ -78,7 +80,7 @@ $(document).ready(function(){
                             '<p class="id" hidden>' + id + '</p>' +
                             '<label for="updateQty">Add/Remove Quantities</label>' +
                             '<input class="quantity" type="number" name="quantity" value="0" min="-50" max="50">' +
-                            '<a class="btn btn-warning add-btn-2" role="button">Add to Cart</a>' +
+                            '<a class="btn btn-warning add-btn-2" role="button">Update Quantity</a>' +
                         '</div>' +
 
                     '</div>' +

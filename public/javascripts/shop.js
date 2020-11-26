@@ -53,11 +53,92 @@ $(document).ready(function(){
         );
     });
 
+    //add pagination dynamically based on the no. of pages
+    var totalPages = parseInt($("#isPaginate").text());
+    var queryString = window.location.search;
+    var urlParams = new URLSearchParams(queryString);
+    var currentPage = parseInt(urlParams.get('page'));
+    var prevPage = currentPage - 1;
+    var nextPage = currentPage + 1;
+
+    var prevBtn;
+    var nextBtn;
+
+    //disable both Previous and Next buttons if there is only 1 page to display
+    if(totalPages == 1){
+        prevBtn =   '<li class="page-item disabled">' +
+                        '<a class="page-link" tabindex="-1">Previous</a>' +
+                    '</li>';
+        
+        nextBtn =   '<li class="page-item disabled">' +
+                        '<a class="page-link" tabindex="-1">Next</a>' +
+                    '</li>';
+
+    }
+
+    //disable the Previous button if current page is the very first page OR page no. is missing from the query string
+    else if((isNaN(currentPage)) || (currentPage == 1)){
+        nextPage = 2;
+
+        prevBtn =   '<li class="page-item disabled">' +
+                        '<a class="page-link" tabindex="-1">Previous</a>' +
+                    '</li>';
+        
+        nextBtn =   '<li class="page-item">' +
+                        '<a class="page-link" href="?page=' + nextPage + '">Next</a>' +
+                    '</li>';
+    }
+
+    //disable the Next button if current page is the very last page
+    else if(currentPage == totalPages){
+        prevBtn =   '<li class="page-item">' +
+                        '<a class="page-link" href="?page=' + prevPage + '">Previous</a>' +
+                    '</li>';
+
+        nextBtn =   '<li class="page-item disabled">' +
+                        '<a class="page-link" tabindex="-1">Next</a>' +
+                    '</li>';
+    }
+
+    //enable both the Previous and Next buttons otherwise
+    else if((currentPage > 1) && (currentPage < totalPages)){
+        prevBtn =   '<li class="page-item">' +
+                        '<a class="page-link" href="?page=' + prevPage + '">Previous</a>' +
+                    '</li>';
+        
+        nextBtn =   '<li class="page-item">' +
+                        '<a class="page-link" href="?page=' + nextPage + '">Next</a>' +
+                    '</li>';
+    }
+
+    $("ul.pagination").append(prevBtn);
+
+    for(var pageNum = 1; pageNum <= totalPages; pageNum++){
+        var numberedList = '<li class="page-item"><a class="page-link" href="?page=' + pageNum + '">' + pageNum + '</a></li>';
+        $("ul.pagination").append(numberedList);
+    }
+
+    $("ul.pagination").append(nextBtn);
+
+    //get the current page no. and highlight the current pagination button
+    $("li.page-item").each(function(){
+        if($(this).find("a.page-link").text() == currentPage){
+            //empty the current anchor style
+            $(this).empty();
+
+            //add new anchor style
+            $(this).append(
+                '<a style="background-color: gainsboro;" class="page-link" href="?page=' + currentPage + '">' + currentPage + '</a>'
+            );
+        }
+    });
+        
     //event handler for "Add to Cart" button on the shopping page(s)
     $("body").on("click", "a.add-btn", (function(){
         id = $(this).siblings(".id").text();
         var qty = $(this).siblings(".quantity").val();
         window.location.href = 'add-to-cart/' + id + '/' + qty; 
+
     }));
 
 });
