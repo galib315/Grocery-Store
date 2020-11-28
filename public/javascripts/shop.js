@@ -137,7 +137,16 @@ $(document).ready(function(){
     $("body").on("click", "a.add-btn", (function(){
         id = $(this).siblings(".id").text();
         var qty = $(this).siblings(".quantity").val();
-        window.location.href = 'add-to-cart/' + id + '/' + qty; 
+        const minVal = 1;
+        const maxVal = 50;
+
+        if((qty < minVal) || (qty > maxVal)){
+            alert("Quantity cannot be more than " + maxVal + " or less than " + minVal);
+        }
+
+        else{
+            window.location.href = 'add-to-cart/' + id + '/' + qty;
+        }
 
     }));
 

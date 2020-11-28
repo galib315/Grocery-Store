@@ -1,9 +1,13 @@
 const express = require('express');
 const path = require('path');
 const hbs = require('hbs');
+const order_id = require("order-id")
 const products = require("./src/models/product_model").product;
+const orders = require("./src/models/order_model")
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
+const multer = require("multer")
+const fs = require("fs")
 
 var Cart = require("./src/models/cart");
 const session = require('express-session');
@@ -21,8 +25,14 @@ const port = process.env.PORT || 3000;
 
 // for customizing directories
 const publicDirectoryPath = path.join(__dirname, "/public");
-const viewsDirectory = path.join(__dirname, "src//views");
+const viewsDirectory = path.join(__dirname, "src/views");
 const partialsPath = path.join(__dirname, "src/views/partials");
+
+
+const upload = multer({
+    dest: path.join(__dirname, "/public/images/")
+    // you might also want to set some limits: https://github.com/expressjs/multer#limits
+});
 
 
 //setting the properties for express
@@ -35,6 +45,7 @@ app.use(express.static(publicDirectoryPath));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
+app.use(express.json())
 
 app.use(session({
     secret: 'secret',
@@ -64,7 +75,7 @@ app.get("/", async (req, res) => {
             totalPages = Math.ceil(counts / itemLimit);
         });
 
-        await products.find({}).limit(itemLimit * 1).skip((page - 1) * limit).then((result) => {
+        await products.find({ is_deleted: false }).limit(itemLimit * 1).skip((page - 1) * limit).then((result) => {
             var productChunks = [];
             var chunkSize = 3;
 
@@ -136,11 +147,11 @@ app.get("/:category", async (req, res) => {
         var totalPages = 1;
 
         //get the total no. of items in the chosen category
-        await products.countDocuments({ category: req.params.category }, function (error, counts) {
+        await products.countDocuments({ category: req.params.category, is_deleted: false }, function (error, counts) {
             totalPages = Math.ceil(counts / itemLimit);
         });
 
-        await products.find({ category: req.params.category }).limit(itemLimit * 1).skip((page - 1) * limit).then((result) => {
+        await products.find({ category: req.params.category,is_deleted: false }).limit(itemLimit * 1).skip((page - 1) * limit).then((result) => {
             var productChunks = [];
             var chunkSize = 3;
 
@@ -159,19 +170,63 @@ app.get("/:category", async (req, res) => {
 
 });
 
+
+//route to admin add page
 app.get("/admin/add", (req, res) => {
 
     res.render("admin_add_product")
 })
 
+//route for adding a new product by admin
+app.post("/products/add",  upload.single("file"), async (req, res) => {
+
+    if (req.file) {
+
+        const handleError = (err, res) => {
+            res.status(500).contentType("text/plain").end("Oops! Something went wrong!");
+        };
+
+        const tempPath = req.file.path;
+        const targetPath = path.join(__dirname, "/public/images/" + req.body.category + "/" + req.body.image_name)
+        fs.rename(tempPath, targetPath, err => {
+            if (err) return handleError(err, res);
+        });
+    }
+    else{
+        res.send("Kindly upload an image for the Product")
+    }
+
+    const imagePath = "/images/" + req.body.category + "/" + req.body.image_name;
+    const add_product = new products({
+
+        title: req.body.title,
+        category: req.body.category,
+        imagePath: imagePath,
+        price: req.body.price,
+        price_description: req.body.price_description,
+        product_description: req.body.price_description
+
+    })
+
+   await add_product.save().then((result) => {
+        res.redirect("/" + req.body.category)
+    }).catch((error) => {
+        res.send(error)
+    })
+})
+
+
+//route to show a particular product details for admin
 app.get("/products/:id/show", (req, res) => {
     products.findById({ _id: req.params.id }).then((product) => {
-        res.render("admin_show_product", { product })
+        res.render("admin_show_product", { product: product })
     }).catch((error) => {
         res.status(500).send(error)
     })
 })
 
+
+//route to admin edit page for editing particular product details
 app.get("/products/:id", (req, res) => {
     products.findById({ _id: req.params.id }).then((product) => {
 
@@ -182,7 +237,26 @@ app.get("/products/:id", (req, res) => {
     })
 })
 
-app.put("/products/:id", (req, res) => {
+
+//route to update the product details
+app.put("/products/:id", upload.single("file"), (req, res) => {
+
+
+    if (req.file) {
+
+        const handleError = (err, res) => {
+            res.status(500).contentType("text/plain").end("Oops! Something went wrong!");
+        };
+
+        var words = req.body.imagePath.split("/")
+        const tempPath = req.file.path;
+        const targetPath = path.join(__dirname, "/public/images/" + req.body.category + "/" + words[words.length - 1])
+        fs.rename(tempPath, targetPath, err => {
+            if (err) return handleError(err, res);
+        });
+
+    }
+
     products.updateOne({ _id: req.params.id },
 
         {
@@ -192,21 +266,31 @@ app.put("/products/:id", (req, res) => {
                 imagePath: req.body.imagePath,
                 product_description: req.body.product_description,
                 price_description: req.price_description,
-                price:req.body.price,
+                price: req.body.price,
+                is_deleted: req.body.is_deleted
 
             }
         }).then((product) => {
 
-        res.redirect("/")
+            res.redirect("/")
 
-    }).catch((error) => {
-        res.status(500).send(error)
-    })
+        }).catch((error) => {
+
+            res.status(500).send(error)
+
+        })
 })
 
+
+//route for soft delete
 app.delete("/products/:id/", (req, res) => {
-    products.deleteOne({_id:req.params.id}).then((product) => {
-        
+    products.updateOne({ _id: req.params.id }, {
+        $set: {
+
+            is_deleted: true
+        }
+    }).then((product) => {
+
         res.redirect("/");
 
     }).catch((error) => {
@@ -214,14 +298,14 @@ app.delete("/products/:id/", (req, res) => {
     })
 })
 
-
+//route to get the admin update page
 app.get("/admin/update", (req, res) => {
 
     res.render("admin_search_filter_product")
 
 })
 
-
+//route for search and filtering functionality for admin
 app.post("/products/search", (req, res) => {
 
     const title = req.body.title
@@ -245,24 +329,34 @@ app.post("/products/search", (req, res) => {
 
 })
 
-app.post("/products/add", (req, res) => {
 
-    const imagePath = "/images/" + req.body.category +"/"+ req.body.image_name;
-    const add_product = new products({
+//route to order details after checkout 
+app.post("/orders/checkout/:username", async (req, res) => {
+    const order_details = req.body;
+    order_details["orderId"] = order_id.generate()
 
-        title: req.body.title,
-        category: req.body.category,
-        imagePath: imagePath,
-        price: req.body.price,
-        price_description: req.body.price_description,
-        product_description: req.body.price_description
+    const new_order = new order(order_details)
 
-    })
-
-    add_product.save().then((result) => {
-        res.redirect("/" + req.body.category)
+    await new_order.save().then(() => {
+        res.render("show_order", { order: order_details })
     }).catch((error) => {
-        res.send(error)
+        res.status(500).send(error)
+    })
+})
+
+//route to order details when a user click on it's particular order history
+app.get("/orders/history/:orderId", async (req, res) => {
+    await orders.findOne({ orderId: req.params.orderId }).then((order) => {
+        res.render("existing_order", { order: order })
+    })
+})
+
+//route to order history for a particular user
+app.get("/orders/:username", (req, res) => {
+    orders.find({ user_email: req.params.username }).then((orders) => {
+        res.render("order_history", { order: orders })
+    }).catch((error) => {
+        res.status(500).send(error)
     })
 })
 

@@ -577,7 +577,6 @@ const products=[
     })
 ]
 
-
 for (var i=0;i<products.length;i+=1){
     products[i].save()
 }

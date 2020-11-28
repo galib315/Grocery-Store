@@ -10,19 +10,33 @@ $(document).ready(function(){
     
     var precise_subTotal = 0;
     var subTotal = 0;
-    const shippingFee = 9.99;
+    var shippingFee = 5.99;
     var tax = 0;
     var grandTotal = 0;
 
     $("strong.item-price").each(function() {
         
         var getPrice = $(this).text();
-        subTotal += parseFloat(getPrice);
-        precise_subTotal = subTotal.toFixed(2);
+
+        //add to the subTotal only if the price > 0
+        if(parseFloat(getPrice) > 0){
+            subTotal += parseFloat(getPrice);
+            precise_subTotal = subTotal.toFixed(2);
+        }
         
-        //remove the product that has been deleted from the shopping cart
-        if(($(this).parent().next("td").find("strong").text()) == 0){
+        //remove the product that has been deleted from the shopping cart (quantity < 1)
+        //also update the price totals accordingly
+        var itemQty = parseInt($(this).parent().next("td").find("strong").text());
+        if(itemQty < 1){
+            
+            //remove the specific deleted product from the shopping cart display
             $(this).parent().parent().remove();
+
+            //if no other product exists on the shopping cart, remove all content from the shopping cart page
+            if($("tr.cart-data").length == 0){
+                $("#cart-info-msg").text("Cart currently empty. Add items to cart.")
+                $("div.cart-summary").remove();
+            }
         }
        
     });
@@ -53,6 +67,7 @@ $(document).ready(function(){
         price_desc = $(this).siblings("p").find(".price_desc").text();
         product_desc = $(this).siblings(".product_desc").text();
         id = $(this).siblings(".id").text();
+        itemQty = parseInt($(this).siblings(".itemQty").text());
         
         //remove the popup window elements if it already exists in the body
         if($("#myModal").length){
@@ -79,8 +94,10 @@ $(document).ready(function(){
                         '<div class="modal-footer">' +
                             '<p class="id" hidden>' + id + '</p>' +
                             '<label for="updateQty">Add/Remove Quantities</label>' +
-                            '<input class="quantity" type="number" name="quantity" value="0" min="-50" max="50">' +
+                            '<input class="quantity" type="number" name="quantity" value="0" min="-' + itemQty + '" max="50">' +
                             '<a class="btn btn-warning add-btn-2" role="button">Update Quantity</a>' +
+                            '<p class="minVal" hidden>-' + itemQty + '</p>' + 
+                            '<p class="maxVal" hidden>50</p>' +
                         '</div>' +
 
                     '</div>' +
@@ -91,11 +108,21 @@ $(document).ready(function(){
         );
     });
 
-    //event handler for "Add to Cart" button on the shopping cart page
+    //event handler for "Update Quantity" button on the shopping cart page
     $("body").on("click", "a.add-btn-2", (function(){
         id = $(this).siblings(".id").text();
         var qty = $(this).siblings(".quantity").val();
-        window.location.href = 'add-to-cart/' + id + '/' + qty + '/no-redirect';    //prevent redirect from the current page
+        var minVal = parseInt($(this).siblings(".minVal").text());
+        var maxVal = parseInt($(this).siblings(".maxVal").text());
+
+        if((qty < minVal) || (qty > maxVal)){
+            alert("Quantity cannot be more than " + maxVal + " or less than " + minVal);
+        }
+
+        else{
+            window.location.href = 'add-to-cart/' + id + '/' + qty + '/no-redirect';    //prevent redirect from the current page
+        }
+        
     }));
 
 });
