@@ -30,6 +30,11 @@ const products_schema = new Schema({
         type:String,
         required:true,
         trim:true
+    },
+    is_deleted:{
+        type:Boolean,
+        required:true,
+        default:false
     }
     
 
