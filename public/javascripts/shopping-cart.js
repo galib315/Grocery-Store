@@ -25,7 +25,6 @@ $(document).ready(function(){
         }
         
         //remove the product that has been deleted from the shopping cart (quantity < 1)
-        //also update the price totals accordingly
         var itemQty = parseInt($(this).parent().next("td").find("strong").text());
         if(itemQty < 1){
             
@@ -54,8 +53,11 @@ $(document).ready(function(){
                     '<li class="d-flex justify-content-between py-3 border-bottom"><strong class="text-muted">Tax </strong><strong>$' + tax + '</strong></li>' +
                     '<li class="d-flex justify-content-between py-3 border-bottom"><strong class="text-muted">Grand Total </strong><strong>$' + grandTotal + '</strong></li>' +
                 '</ul>'+
-                '<a class="btn btn-success" href="/checkout" role="button">Proceed to Checkout</a></br></br>' +
-            '</div>' +
+                '</br>' +
+                '<button type="button" class="btn btn-primary proceed-checkout-btn">Proceed to Checkout</button>' +
+                '</br>' + '</br>' +
+                '<a class="btn btn-warning return-btn" href="/" role="button">Continue Shopping</a>' +
+            '</div>' + 
         '</div>'
     );
     
@@ -120,9 +122,54 @@ $(document).ready(function(){
         }
 
         else{
-            window.location.href = 'add-to-cart/' + id + '/' + qty + '/no-redirect';    //prevent redirect from the current page
+            var reqUrl = 'add-to-cart/' + id + '/' + qty;
+
+            $.ajax({
+                url: reqUrl,
+                success: function(data) {
+                    window.location.reload();
+                },
+                error: function() { alert("Error While Loading File");  }
+
+            });
         }
         
     }));
+
+    //event handler for "Proceed to Checkout" button
+    $(".proceed-checkout-btn").on("click", function(){
+        
+        //array of product objects
+        var productArr = [];
+        
+        $("div.item-details").each(function() {
+            var productObj = {};
+
+            var item_title = $(this).find(".cart-product-title").text();
+            productObj["title"] = item_title;
+
+            var itemQty = $(this).find("p.itemQty").text();
+            productObj["quantity"] = itemQty;
+
+            var imgPath = $(this).prev("img").attr("src");
+            productObj["imagePath"] = imgPath;
+
+            var category = $(this).find("p.category").text();
+            productObj["category"] = category;
+
+            //get the aggregate price of a particular item
+            var price = $(this).parent().parent().next("td").find("strong.item-price").text();
+            productObj["total_product_price"] = price;
+
+            productArr.push(productObj);
+        
+        });
+
+        $("input.checkout-price").val(grandTotal);
+        $(".checkout-product-array").val(JSON.stringify(productArr));   //convert to string before sending to server
+
+        $("form.checkout-form").submit();
+    
+    });
 
 });

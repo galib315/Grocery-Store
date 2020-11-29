@@ -1,9 +1,9 @@
 const express = require('express');
 const path = require('path');
 const hbs = require('hbs');
-const order_id = require("order-id")
+const orderId = require('order-id')('mysecret');
 const products = require("./src/models/product_model").product;
-const orders = require("./src/models/order_model")
+const orders = require("./src/models/order_model").orders;
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const multer = require("multer")
@@ -63,38 +63,64 @@ app.use(function (req, res, next) {
 app.use(methodOverride("_method"))
 
 
-//root route - returns all products
+//root route - returns all products (including any search result)
 app.get("/", async (req, res) => {
     try {
         const itemLimit = 15;   //no. of items to display on each page
         const { page = 1, limit = itemLimit } = req.query;
         var totalPages = 1;
 
-        //get the total no. of all items
-        await products.countDocuments({}, function (error, counts) {
-            totalPages = Math.ceil(counts / itemLimit);
-        });
+        if(req.query.itemTitle){
+            var itemTitle = req.query.itemTitle;
 
-        await products.find({ is_deleted: false }).limit(itemLimit * 1).skip((page - 1) * limit).then((result) => {
-            var productChunks = [];
-            var chunkSize = 3;
+            //get the total no. of items in the searched result
+            await products.countDocuments({$and: [{title: {$regex: itemTitle, $options: "i"}}, {is_deleted: false}]}, function (error, counts) {
+                totalPages = Math.ceil(counts / itemLimit);
 
-            for (var i = 0; i < result.length; i += chunkSize) {
-                productChunks.push(result.slice(i, i + chunkSize));
-            }
+            });
 
-            res.render("index", { product: productChunks, pagination: totalPages });
+            await products.find({$and: [{title: {$regex: itemTitle, $options: "i"}}, {is_deleted: false}]}).limit(itemLimit * 1).skip((page - 1) * limit).then((result) => {
+                var productChunks = [];
+                var chunkSize = 3;
 
-        })
+                for (var i = 0; i < result.length; i += chunkSize) {
+                    productChunks.push(result.slice(i, i + chunkSize));
+                }
+
+                res.render("index", { product: productChunks, pagination: totalPages });
+
+            });
+        }
+        
+        else{
+            //get the total no. of all items
+            await products.countDocuments({is_deleted: false}, function (error, counts) {
+                totalPages = Math.ceil(counts / itemLimit);
+
+            });
+
+            await products.find({is_deleted: false}).limit(itemLimit * 1).skip((page - 1) * limit).then((result) => {
+                var productChunks = [];
+                var chunkSize = 3;
+
+                for (var i = 0; i < result.length; i += chunkSize) {
+                    productChunks.push(result.slice(i, i + chunkSize));
+                }
+
+                res.render("index", { product: productChunks, pagination: totalPages });
+
+            });
+        }
 
     }
+
     catch (error) {
         res.status(500).send(error);
     }
 
 });
 
-//route to add products to the cart (redirects to the home page)
+//route to add products to the shopping cart
 app.get('/add-to-cart/:id/:qty', async (req, res) => {
     var productId = req.params.id;
     var qty = parseInt(req.params.qty);
@@ -103,22 +129,9 @@ app.get('/add-to-cart/:id/:qty', async (req, res) => {
     await products.findOne({ _id: productId }, function (err, product) {
         cart.add(product, productId, qty);
         req.session.cart = cart;
-        res.redirect('/');
+        res.sendStatus(200);
     });
-});
 
-//route to update product quantity from the shopping cart page (stays on the current page)
-app.get('/add-to-cart/:id/:qty/no-redirect', async (req, res) => {
-    var productId = req.params.id;
-    var qty = parseInt(req.params.qty);
-    var cart = new Cart(req.session.cart ? req.session.cart.items : {});
-
-    await products.findOne({ _id: productId }, function (err, product) {
-
-        cart.add(product, productId, qty);
-        req.session.cart = cart;
-        res.redirect('/cart');
-    });
 });
 
 //route to render the shopping cart page
@@ -131,12 +144,16 @@ app.get('/cart', async (req, res) => {
 });
 
 //route to render the checkout page
-app.get('/checkout', function (req, res) {
+app.post('/checkout', function (req, res) {
     if (!req.session.cart) {
         return res.render('cart', { products: null });
     }
 
-    res.render('checkout');
+    var productArray = req.body.products;
+    var grandTotal = req.body.grandTotal;
+    
+    res.render('checkout', {grandTotal: grandTotal, products: productArray});
+                                
 });
 
 //route to return products from chosen category
@@ -147,11 +164,11 @@ app.get("/:category", async (req, res) => {
         var totalPages = 1;
 
         //get the total no. of items in the chosen category
-        await products.countDocuments({ category: req.params.category, is_deleted: false }, function (error, counts) {
+        await products.countDocuments({$and: [{category: req.params.category}, {is_deleted: false}]}, function (error, counts) {
             totalPages = Math.ceil(counts / itemLimit);
         });
 
-        await products.find({ category: req.params.category,is_deleted: false }).limit(itemLimit * 1).skip((page - 1) * limit).then((result) => {
+        await products.find({$and: [{category: req.params.category}, {is_deleted: false }]}).limit(itemLimit * 1).skip((page - 1) * limit).then((result) => {
             var productChunks = [];
             var chunkSize = 3;
 
@@ -161,7 +178,7 @@ app.get("/:category", async (req, res) => {
 
             res.render("index", { product: productChunks, pagination: totalPages });
 
-        })
+        });
 
     }
     catch (error) {
@@ -169,7 +186,6 @@ app.get("/:category", async (req, res) => {
     }
 
 });
-
 
 //route to admin add page
 app.get("/admin/add", (req, res) => {
@@ -281,7 +297,6 @@ app.put("/products/:id", upload.single("file"), (req, res) => {
         })
 })
 
-
 //route for soft delete
 app.delete("/products/:id/", (req, res) => {
     products.updateOne({ _id: req.params.id }, {
@@ -318,6 +333,7 @@ app.post("/products/search", (req, res) => {
             res.json(error)
         })
     }
+
     else {
         product.find({ title: { $regex: title }, category: { $regex: category } }).then((products) => {
             res.send(products)
@@ -326,32 +342,33 @@ app.post("/products/search", (req, res) => {
         })
     }
 
-
 })
 
-
-//route to order details after checkout 
-app.post("/orders/checkout/:username", async (req, res) => {
+//route to save order details after checkout 
+app.post("/checkout/submitOrder", async (req, res) => {
     const order_details = req.body;
-    order_details["orderId"] = order_id.generate()
-
-    const new_order = new order(order_details)
+    order_details["orderId"] = orderId.generate();
+    order_details["products"] = JSON.parse(req.body.products);  //convert string to JSON object before pushing to DB
+    const new_order = new orders(order_details)
 
     await new_order.save().then(() => {
-        res.render("show_order", { order: order_details })
+        res.render("show_order", { order: order_details });
+        req.session.destroy();
+        
     }).catch((error) => {
-        res.status(500).send(error)
+        res.status(500).send(error);
     })
-})
 
-//route to order details when a user click on it's particular order history
+});
+
+//route to display order details when a user clicks on a particular order history
 app.get("/orders/history/:orderId", async (req, res) => {
     await orders.findOne({ orderId: req.params.orderId }).then((order) => {
         res.render("existing_order", { order: order })
     })
 })
 
-//route to order history for a particular user
+//route to display order history for a particular user
 app.get("/orders/:username", (req, res) => {
     orders.find({ user_email: req.params.username }).then((orders) => {
         res.render("order_history", { order: orders })

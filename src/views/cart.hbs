@@ -1,7 +1,8 @@
 {{>header}}
 
 {{# if this.products }}
-    <div class="px-4 px-lg-0">
+
+<div class="px-4 px-lg-0">
   
     <div class="container text-white py-5 text-center">
         <h1 class="display-4">Shopping Cart</h1>
@@ -37,12 +38,13 @@
                             <th scope="row" class="border-0">
                                 <div class="p-2">
                                     <img src="{{this.item.imagePath}}" width="70" class="img-fluid rounded shadow-sm">
-                                    <div class="ml-3 d-inline-block align-middle">
+                                    <div class="item-details ml-3 d-inline-block align-middle">
                                         <a class="text-dark d-inline-block align-middle cart-product-title" data-toggle="modal" data-target="#myModal">{{this.item.title}}</a>
                                         <p hidden><span class="price">{{this.item.price}}</span><span class="price_desc">{{this.item.price_description}}</span></p>
                                         <p class="product_desc" hidden>{{this.item.product_description}}</p>
                                         <p class="id" hidden>{{this.item._id}}</p>
                                         <p class="itemQty" hidden>{{this.qty}}</p>
+                                        <p class="category" hidden>{{this.item.category}}</p>
                                     </div>
                                 </div>
                             </th>
@@ -61,15 +63,27 @@
         <div class="row py-5 p-4 bg-white rounded shadow-sm">
             <div class="col-lg-6" id="cart-summary">
             </div>
+            </br>
         </div>
+
+        <!-- Hidden input form for checkout POST request -->
+        <form class="checkout-form" action="/checkout" method="POST" hidden>
+            <input type="text" name="grandTotal" class="checkout-price">
+            <textarea name="products" class="checkout-product-array"></textarea>
+        </form>
     </div>
-    </div>
+    </br>
+    </br>
+</div>
 
 {{ else }}
     <div class="px-4 px-lg-0">
         <div class="container text-white py-5 text-center">
             <h4 class="display-4">Cart Currently Empty - Nothing to Display</h4>
             </br></br>
+        </div>
+        <div class="col-lg-6">
+            <a class="btn btn-warning return-btn" href="/" role="button">Continue Shopping</a>
         </div>
     </div>
 {{/if}}

@@ -1,9 +1,21 @@
 {{>header}}
 
-<div class="jumbotron">
-    <h1 class="display-4">Grocery Store</h1>
-</div>
+<!-- Start of Navigation Bar - Remove this block of code (Except the search bar) and replace it with your navigation bar code -->
+<div class="topnav" id="myTopnav">
+    <a href="/" class="active">GreenMart</a>
 
+    <a class="nav-item pl-2 mb-2 mb-md-0"  href="/cart">My Cart</a>
+
+    <!--Start of Search Bar - Integrate this block of code into your navigation bar. Just copy & paste -->
+    <form class="form-inline my-2 my-lg-0">
+        <input class="form-control mr-sm-2" id="searchInput" type="search" placeholder="Looking for something?" aria-label="Search">
+        <button type="button" class="btn btn-outline-success my-2 my-sm-0" id="searchBtn"><b>Search</b></button>
+    </form>
+    <!-- End of Search Bar -->
+</div>
+<!-- End of Navigation Bar -->
+
+</br>
 <div class="container">
     {{#each product}}
     <div class="row">

@@ -8,56 +8,29 @@
       <div class="row">
         <div class="col-md-2 order-md-2 mb-4">
           <h4 class="d-flex justify-content-between align-items-center mb-3">
-            <span class="text-muted">Your Cart</span>
-            <span class="badge badge-secondary badge-pill">3</span>
+            <span class="text-muted">Price</span>
           </h4>
+
           <ul class="list-group mb-3">
-            <li class="list-group-item d-flex justify-content-between lh-condensed">
-              <div>
-                <h6 class="my-0">Product name</h6>
-                <small class="text-muted">Brief description</small>
-              </div>
-              <span class="text-muted">$12</span>
-            </li>
-            <li class="list-group-item d-flex justify-content-between lh-condensed">
-              <div>
-                <h6 class="my-0">Second product</h6>
-                <small class="text-muted">Brief description</small>
-              </div>
-              <span class="text-muted">$8</span>
-            </li>
-            <li class="list-group-item d-flex justify-content-between lh-condensed">
-              <div>
-                <h6 class="my-0">Third item</h6>
-                <small class="text-muted">Brief description</small>
-              </div>
-              <span class="text-muted">$5</span>
-            </li>
-            <li class="list-group-item d-flex justify-content-between bg-light">
-              <div class="text-success">
-                <h6 class="my-0">Promo code</h6>
-                <small>EXAMPLECODE</small>
-              </div>
-              <span class="text-success">-$5</span>
-            </li>
             <li class="list-group-item d-flex justify-content-between">
-              <span>Total (USD)</span>
-              <strong>$20</strong>
+              <span>Total: </span>
+              <strong id="checkout-total">${{grandTotal}}</strong>
             </li>
           </ul>
 
           <form class="card p-2">
             <div class="input-group">
-              <input type="text" class="form-control" placeholder="Promo code">
+              <input type="text" class="form-control" name="promo-code" value="" placeholder="Promo code">
               <div class="input-group-append">
-                <button type="submit" class="btn btn-secondary">Redeem</button>
               </div>
             </div>
           </form>
+          </br>
+          <button type="button" class="redeem-btn btn btn-secondary">Redeem</button>
         </div>
         <div class="col-md-8 order-md-1">
-          <h4 class="mb-3">Billing address</h4>
-          <form class="needs-validation" novalidate>
+          <h4 class="mb-3">Shipping Details</h4>
+          <form class="submit-order-form needs-validation" action="/checkout/submitOrder" method="POST" novalidate>
             <div class="row">
               <div class="col-md-6 mb-3">
                 <label for="firstName">First Name</label>
@@ -74,44 +47,52 @@
                 </div>
               </div>
             </div>
+            </br>
+
+            <div class="mb-3" hidden>
+              <input type="text" class="form-control" id="user_name" name="user_name">
+            </div>
 
             <div class="mb-3">
-              <label for="email">Email <span class="text-muted">(Optional)</span></label>
-              <input type="email" class="form-control" id="email" placeholder="you@example.com">
+              <label for="email">Email</label>
+              <input type="email" class="form-control" id="user_email" name="user_email" placeholder="you@example.com">
               <div class="invalid-feedback">
                 Please enter a valid email address for shipping updates.
               </div>
             </div>
+            </br>
 
             <div class="mb-3">
-              <label for="address">Address</label>
-              <input type="text" class="form-control" id="address" placeholder="1234 Main St" required>
+              <label for="address">Shipping Address 1</label>
+              <input type="text" class="form-control" id="user_address1" placeholder="1234 Main St" required>
               <div class="invalid-feedback">
                 Please enter your shipping address.
               </div>
             </div>
+            </br>
 
             <div class="mb-3">
-              <label for="address2">Address 2 <span class="text-muted">(Optional)</span></label>
-              <input type="text" class="form-control" id="address2" placeholder="Apartment or suite">
+              <label for="address2">Shipping Address 2 <span class="text-muted">(Optional)</span></label>
+              <input type="text" class="form-control" id="user_address2" value="" placeholder="Apartment or suite">
             </div>
+            </br>
+
+            <div class="mb-3" hidden>
+              <input type="text" class="form-control" id="user_address" name="user_address" value="">
+            </div>
+            </br>
 
             <div class="row">
               <div class="col-md-5 mb-3">
                 <label for="country">Country</label>
-                <select class="custom-select d-block w-100" id="country" required>
-                  <option value="">Choose...</option>
-                  <option>United States</option>
+                <select class="custom-select d-block w-100" id="user_country" name="user_country">
+                  <option value="USA">USA</option>
                 </select>
-                <div class="invalid-feedback">
-                  Please select a valid country.
-                </div>
               </div>
               <div class="col-md-4 mb-3">
                 <label for="state">State</label>
-                <select class="custom-select d-block w-100" id="state" required>
+                <select class="custom-select d-block w-100 state" name="user_state" required>
                   <option value="">Choose...</option>
-                  <option>California</option>
                 </select>
                 <div class="invalid-feedback">
                   Please provide a valid state.
@@ -119,16 +100,33 @@
               </div>
               <div class="col-md-3 mb-3">
                 <label for="zip">Zip</label>
-                <input type="text" class="form-control" id="zip" placeholder="" required>
+                <input type="text" class="form-control" id="user_zipcode" name="user_zipcode" required>
                 <div class="invalid-feedback">
                   Zip code required.
                 </div>
               </div>
             </div>
+            <div class="mb-3" hidden>
+              <input type="text" class="form-control" id="payment_status" name="payment_status" value="true">
+            </div>
+            <div class="mb-3" hidden>
+              <input type="text" class="form-control" id="date" name="date">
+            </div>
+            <div class="mb-3" hidden>
+              <input type="text" class="form-control" id="time" name="time">
+            </div>
+            <div class="mb-3" hidden>
+              <input type="text" class="form-control" id="total_price" name="total_price" value={{grandTotal}}>
+            </div>
+            <div class="mb-3" hidden>
+              <textarea name="products" class="product-array">{{products}}</textarea>
+            </div>
+          </form>
+          <form class="card p-2">
             <hr class="mb-4">
             <div class="custom-control custom-checkbox">
               <input type="checkbox" class="custom-control-input" id="same-address">
-              <label class="custom-control-label" for="same-address">Shipping address is the same as my billing address</label>
+              <label class="custom-control-label" for="same-address">Billing address is the same as my shipping address</label>
             </div>
             <hr class="mb-4">
 
@@ -148,10 +146,11 @@
                 <label class="custom-control-label" for="paypal">Paypal</label>
               </div>
             </div>
+            </br>
             <div class="row">
               <div class="col-md-6 mb-3">
                 <label for="cc-name">Name on card</label>
-                <input type="text" class="form-control" id="cc-name" placeholder="" required>
+                <input type="text" class="form-control" id="cc-name" name="cc-name" placeholder="" required>
                 <small class="text-muted">Full name as displayed on card</small>
                 <div class="invalid-feedback">
                   Name on card is required
@@ -159,32 +158,36 @@
               </div>
               <div class="col-md-6 mb-3">
                 <label for="cc-number">Credit card number</label>
-                <input type="text" class="form-control" id="cc-number" placeholder="" required>
+                <input type="text" class="form-control" id="cc-number" name="cc-number" placeholder="" required>
                 <div class="invalid-feedback">
                   Credit card number is required
                 </div>
               </div>
             </div>
+            </br>
             <div class="row">
               <div class="col-md-3 mb-3">
                 <label for="cc-expiration">Expiration</label>
-                <input type="text" class="form-control" id="cc-expiration" placeholder="" required>
+                <input type="text" class="form-control" id="cc-expiration" name="cc-expiration" placeholder="" required>
                 <div class="invalid-feedback">
                   Expiration date required
                 </div>
               </div>
               <div class="col-md-3 mb-3">
                 <label for="cc-expiration">CVV</label>
-                <input type="text" class="form-control" id="cc-cvv" placeholder="" required>
+                <input type="text" class="form-control" id="cc-cvv" name="cc-cvv" placeholder="" required>
                 <div class="invalid-feedback">
                   Security code required
                 </div>
               </div>
             </div>
+            </br>
             <hr class="mb-4">
-            <button class="btn btn-primary btn-lg btn-block" type="submit">Place Order</button>
           </form>
-          </br></br>
+          </br>
+          <button class="btn btn-success btn-lg btn-block submit-order-btn" type="button">Place Order</button></br>
+          <a class="btn btn-warning btn-lg btn-block" href="/cart" role="button">Back to Cart</a></br>
+          </br>
         </div>
       </div>
     </div>

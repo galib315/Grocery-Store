@@ -145,9 +145,26 @@ $(document).ready(function(){
         }
 
         else{
-            window.location.href = 'add-to-cart/' + id + '/' + qty;
+            var reqUrl = 'add-to-cart/' + id + '/' + qty;
+
+            $.ajax({
+                url: reqUrl,
+                success: function(data) {
+                    window.location.reload();
+                },
+                error: function() { alert("Error While Loading File");  }
+
+            });
         }
 
     }));
+
+    //event handler for search bar and search submit button
+    $("#searchBtn").click(function(){
+        
+        var searchString = $("#searchInput").val();
+        window.location.href = '/?itemTitle=' + searchString;
+        
+    });
 
 });

@@ -1,6 +1,6 @@
 require("../db/db_connection")
 const mongoose = require("mongoose")
-const order = require("../models/order_model")
+const order = require("../models/order_model").orders
 const orderid = require("order-id")("my-secret")
 
 const orders = [

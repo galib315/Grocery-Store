@@ -73,7 +73,7 @@ const order_schema=new Schema({
     },
     payment_status:{
         type:Boolean,
-        required:true
+        required:false
     },
     date:{
         type:String,
@@ -85,6 +85,8 @@ const order_schema=new Schema({
         required:true,
         trim:true
     }
-})
+});
 
-module.exports=mongoose.model("orders",order_schema)
+module.exports = {
+    orders:mongoose.model("orders",order_schema)
+}
