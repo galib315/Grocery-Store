@@ -63,23 +63,69 @@ app.use(function (req, res, next) {
 app.use(methodOverride("_method"))
 
 
-//root route - returns all products (including any search result)
+//root route - returns all products
 app.get("/", async (req, res) => {
     try {
         const itemLimit = 15;   //no. of items to display on each page
         const { page = 1, limit = itemLimit } = req.query;
         var totalPages = 1;
+        
+        //get the total no. of all items
+        await products.countDocuments({is_deleted: false}, function (error, counts) {
+            totalPages = Math.ceil(counts / itemLimit);
 
-        if(req.query.itemTitle){
+        });
+
+        await products.find({is_deleted: false}).limit(itemLimit * 1).skip((page - 1) * limit).then((result) => {
+            var productChunks = [];
+            var chunkSize = 3;
+
+            for (var i = 0; i < result.length; i += chunkSize) {
+                productChunks.push(result.slice(i, i + chunkSize));
+            }
+
+            res.render("index", { product: productChunks, pagination: totalPages });
+
+        });
+        
+    }
+
+    catch (error) {
+        res.status(500).send(error);
+    }
+
+});
+
+//route to return results based on search/filter criteria
+app.get("/search-filter", async (req, res) => {
+    try {
+        const itemLimit = 15;   //no. of items to display on each page
+        const { page = 1, limit = itemLimit } = req.query;
+        var totalPages = 1;
+
+        var minPrice;
+        var maxPrice;
+
+        if(req.query.minPrice && req.query.maxPrice){
+            minPrice = parseInt(req.query.minPrice);
+            maxPrice = parseInt(req.query.maxPrice);
+        }
+
+        if(req.query.itemTitle && !req.query.categories){
             var itemTitle = req.query.itemTitle;
 
             //get the total no. of items in the searched result
-            await products.countDocuments({$and: [{title: {$regex: itemTitle, $options: "i"}}, {is_deleted: false}]}, function (error, counts) {
+            await products.countDocuments({$and: [{title: {$regex: itemTitle, $options: "i"}},
+                                                 {price: {$gte: minPrice, $lte: maxPrice}}, {is_deleted: false}]}, function (error, counts) {
+                
                 totalPages = Math.ceil(counts / itemLimit);
 
             });
 
-            await products.find({$and: [{title: {$regex: itemTitle, $options: "i"}}, {is_deleted: false}]}).limit(itemLimit * 1).skip((page - 1) * limit).then((result) => {
+            await products.find({$and: [{title: {$regex: itemTitle, $options: "i"}}, 
+                                        {price: {$gte: minPrice, $lte: maxPrice}}, 
+                                        {is_deleted: false}]}).limit(itemLimit * 1).skip((page - 1) * limit).then((result) => {
+
                 var productChunks = [];
                 var chunkSize = 3;
 
@@ -91,15 +137,81 @@ app.get("/", async (req, res) => {
 
             });
         }
-        
-        else{
-            //get the total no. of all items
-            await products.countDocuments({is_deleted: false}, function (error, counts) {
+
+        else if(req.query.itemTitle && req.query.categories){
+            var itemTitle = req.query.itemTitle;
+            var categoriesStr = req.query.categories;
+            var categoriesArr = categoriesStr.toLowerCase().split(",");
+
+            //get the total no. of items in the searched result
+            await products.countDocuments({$and: [{title: {$regex: itemTitle, $options: "i"}},
+                                                 {price: {$gte: minPrice, $lte: maxPrice}}, 
+                                                 {category: categoriesArr}, 
+                                                 {is_deleted: false}]}, function (error, counts) {
+                
                 totalPages = Math.ceil(counts / itemLimit);
 
             });
 
-            await products.find({is_deleted: false}).limit(itemLimit * 1).skip((page - 1) * limit).then((result) => {
+            await products.find({$and: [{title: {$regex: itemTitle, $options: "i"}},
+                                        {price: {$gte: minPrice, $lte: maxPrice}},
+                                        {category: categoriesArr},   
+                                        {is_deleted: false}]}).limit(itemLimit * 1).skip((page - 1) * limit).then((result) => {
+
+                var productChunks = [];
+                var chunkSize = 3;
+
+                for (var i = 0; i < result.length; i += chunkSize) {
+                    productChunks.push(result.slice(i, i + chunkSize));
+                }
+
+                res.render("index", { product: productChunks, pagination: totalPages });
+
+            });
+        }
+
+        else if(!req.query.itemTitle && req.query.categories){
+            var categoriesStr = req.query.categories;
+            var categoriesArr = categoriesStr.toLowerCase().split(",");
+            
+            //get the total no. of items in the searched result
+            await products.countDocuments({$and: [{price: {$gte: minPrice, $lte: maxPrice}}, 
+                                                 {category: categoriesArr},  
+                                                 {is_deleted: false}]}, function (error, counts) {
+                
+                totalPages = Math.ceil(counts / itemLimit);
+
+            });
+
+            await products.find({$and: [{price: {$gte: minPrice, $lte: maxPrice}},
+                                        {category: categoriesArr},   
+                                        {is_deleted: false}]}).limit(itemLimit * 1).skip((page - 1) * limit).then((result) => {
+
+                var productChunks = [];
+                var chunkSize = 3;
+
+                for (var i = 0; i < result.length; i += chunkSize) {
+                    productChunks.push(result.slice(i, i + chunkSize));
+                }
+
+                res.render("index", { product: productChunks, pagination: totalPages });
+
+            });
+        }
+
+        else if(req.query.minPrice && req.query.maxPrice && !req.query.itemTitle && !req.query.categories){
+
+            //get the total no. of items in the searched result
+            await products.countDocuments({$and: [{price: {$gte: minPrice, $lte: maxPrice}}, 
+                                                 {is_deleted: false}]}, function (error, counts) {
+                
+                totalPages = Math.ceil(counts / itemLimit);
+
+            });
+
+            await products.find({$and: [{price: {$gte: minPrice, $lte: maxPrice}}, 
+                                        {is_deleted: false}]}).limit(itemLimit * 1).skip((page - 1) * limit).then((result) => {
+
                 var productChunks = [];
                 var chunkSize = 3;
 
@@ -119,6 +231,9 @@ app.get("/", async (req, res) => {
     }
 
 });
+
+
+
 
 //route to add products to the shopping cart
 app.get('/add-to-cart/:id/:qty', async (req, res) => {

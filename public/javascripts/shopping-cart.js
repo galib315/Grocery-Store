@@ -122,14 +122,14 @@ $(document).ready(function(){
         }
 
         else{
-            var reqUrl = 'add-to-cart/' + id + '/' + qty;
+            var reqUrl = '/add-to-cart/' + id + '/' + qty;
 
             $.ajax({
                 url: reqUrl,
                 success: function(data) {
                     window.location.reload();
                 },
-                error: function() { alert("Error While Loading File");  }
+                error: function() { alert("Error While Updating Cart");  }
 
             });
         }

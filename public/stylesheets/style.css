@@ -66,22 +66,40 @@ a.add-btn-2{
 	table-layout: fixed;
 }
 
+.price-range{
+    margin: 10px;
+}
+
+.price-range-label{
+    margin: 2px;
+}
+
+/* Styling properties for the form element which includes filter button, search bar and search button */
+.form-style{
+    margin-left: 400px;
+}
+
 /* Styling properties for the search bar */
 #searchInput{
-    width: 35%;
-    margin-left: 80px;
-    padding: 6px;
-    border: none;
-    margin-top: 8px;
+    width: 40%;
+    padding: 12px;
     font-size: 15px;
+    margin-top: 8px;
+    border: none;
 }
 
 /* Styling properties for the search submit button */
 #searchBtn{
-    margin-left: auto;
-    padding: 6px;
-    border: none;
+    padding: 8px;
     margin-top: 8px;
+    border: none;
+}
+
+/* Styling properties for the filter button */
+#filterBtn{
+    padding: 8px;
+    margin-top: 8px;
+    border: none;
 }
 
 #cart-link{
@@ -92,7 +110,7 @@ a.add-btn-2{
 .topnav {
     background-color: #333;
     overflow: hidden;
-  }
+}
   
 /* Style the links inside the navigation bar */
 .topnav a {
