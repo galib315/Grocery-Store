@@ -1,3 +1,7 @@
+body{
+    padding-top: 70px;
+}
+
 .price {
     font-weight: bold;
     font-size: medium;

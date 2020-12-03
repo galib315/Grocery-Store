@@ -85,11 +85,6 @@ app.use(function(req, res, next) {
   });
   
 
-
-
-
-  
-
 //root route - returns all products
 app.get("/", async (req, res) => {
     try {
@@ -318,8 +313,6 @@ app.get("/search-filter", async (req, res) => {
 });
 
 
-
-
 //route to add products to the shopping cart
 app.get('/add-to-cart/:id/:qty', async (req, res) => {
     var productId = req.params.id;
@@ -522,7 +515,7 @@ app.post("/products/search", isLoggedIn, (req, res) => {
     const category = req.body.category
 
     if (category === "all") {
-        products.find({ title: { $regex: title } }).then((products) => {
+        products.find({ title: { $regex: title, $options: "i" } }).then((products) => {
             res.json(products)
         }).catch((error) => {
             res.json(error)
@@ -547,7 +540,7 @@ app.post("/checkout/submitOrder", async (req, res) => {
 
     await new_order.save().then(() => {
         res.render("show_order", { order: order_details });
-        req.session.destroy();
+        delete req.session['cart'];    //delete items from cart
 
     }).catch((error) => {
         res.status(500).send(error);

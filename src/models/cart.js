@@ -24,6 +24,11 @@ module.exports = function Cart(initItems) {
         this.totalQty += storedItem.qty;
     };
 
+    //get the total no. of products in the cart
+    this.getTotalQty = function(){
+        return this.totalQty;
+    }
+
     //loop through the array of cart items
     this.lookupItems = function () {
         var arr = [];

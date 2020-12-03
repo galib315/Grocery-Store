@@ -43,11 +43,11 @@
 			<label for="product_description" class="col-sm-2 col-form-label">Product Description</label>
 			<textarea name="product_description" class="form-control">{{product.product_description}}</textarea>
 		</div>
-		<button type="submit" class="btn btn-warning"> Update Product </button>
+		<button type="submit" class="btn btn-success"> Update Product </button>
 	</form>
+	</br>
+	<a href="/products/{{product._id}}/show" class="btn btn-warning" role="button">Back to Product</a>
 
-	<p><a href="/products/{{product._id}}/show">Back to Product</a></p>
-
-</div>
+</div></br>
 
 {{>footer}}
