@@ -30,13 +30,16 @@ const products_schema = new Schema({
         type:String,
         required:true,
         trim:true
+    },
+    is_deleted:{
+        type:Boolean,
+        required:true,
+        default:false
     }
     
 
 })
 
 module.exports = {
-    fruits:mongoose.model("fruit", products_schema),
-    vegetables:mongoose.model("vegetables",products_schema),
-    personalcare:mongoose.model("personal_care",products_schema)
+    product:mongoose.model("product", products_schema)
 }
