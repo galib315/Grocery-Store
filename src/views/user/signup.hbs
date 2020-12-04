@@ -24,15 +24,21 @@
             <label for="password">Password</label>&nbsp&nbsp<small id="password_message">(Password must be more than 8 character and must include atleast 1 of each Special Char, Uppercase, Lowercase , Number)</small>
             <input type="password" name="password" placeholder="Enter your Password" class="form-control" id="password">
         </div>
+        <div class="form-group">
+            <label for="password-confirm">Confirm Password</label>&nbsp&nbsp<small id="password_message_confirm">(Password must match your previously typed password)</small>
+            <input type="password" name="password-confirm" placeholder="Re-enter your Password" class="form-control" id="password-confirm">
+        </div>
         <div class="form-group form-check">
             <input type="checkbox" name="isadmin" class="form-check-input" id="isadmin">
             <label class="form-check-label" for="exampleCheck1">Please check if you are an admin user</label>
         </div>
-        <button type="submit" class="btn btn-warning">Sign Up</button><br>
-        <a type="button" style="margin-top: 10px;" class="btn btn-warning mt-2" href="/user/signin">Already Existing
-            User</a>
+        <button type="submit" class="btn btn-primary" id="user-signup-btn" disabled='disabled'>Sign Up</button><br>
+        <a type="button" style="margin-top: 10px;" class="btn btn-info mt-2" href="/user/signin">Already Existing User</a>
     </form>
+    </br>
+    <a href="/" class="btn btn-warning" role="button">Back to Main</a>
 </div>
+</br>
 
 </body>
 
