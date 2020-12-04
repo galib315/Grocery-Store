@@ -120,6 +120,7 @@ app.get("/", async (req, res) => {
 
 app.get("/user/logout", isLoggedIn, function (req, res, next) {
     req.logout();
+    req.session.destroy();
     res.redirect('/user/signin');
 });
 
